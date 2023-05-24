@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>商品管理</title>
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="style.css">
+  <style>
+    /* CSS cho trang danh sách sản phẩm */
+    .product-list {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-gap: 20px;
+    }
+    
+    .product-item {
+/*       border: 1px solid #ccc; */
+      padding: 10px;
+    }
+    
+    button.btn {
+    	width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <h1 style="text-align: center;">商品リスト</h1>
+  <div class="product-list">
+  		
+  		<form action="/attribute-chip">
+	    <button class="btn btn-success">
+		    <div class="product-item">
+		      <h2>プロセッサー</h2>
+		      <p>Intel、Ryzen。。</p>
+		    </div>
+	    </button>
+	    </form>
+
+    	<form action="/attribute-color">
+	    <button class="btn btn-danger">
+		    <div class="product-item">
+		      <h2>色</h2>
+		      <p>黒、白、グレー。。</p>
+		    </div>
+	    </button>
+		</form>
+		
+    	<form action="/attribute-size">
+		    <button class="btn btn-primary">
+			    <div class="product-item">
+			      <h2>サイズ</h2>
+			      <p>13、14、15.6。。</p>
+			    </div>
+		    </button>
+	    </form>
+  </div>
+ 	<div class="container">
+ 	<table class="table" style="margin-top:30px;">
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>商品名</th>
+					<th>詳細説明</th>
+					<th>属性名</th>
+					<th>属性の値</th>
+					<th>公開状態</th>
+					<th>行動</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="product : ${listProduct}">
+					<td th:text="${product.product_id}"></td>
+					<td th:text="${product.name}"></td>
+					<td th:text="${product.description}"></td>
+					<td th:text="${product.attributeName}"></td>
+					<td th:text="${product.attributeValue}"></td>
+					<td><span th:if="${product.publicStatus}"> <input
+							type="checkbox" id="publicStatus" name="publicStatus"
+							value="true" checked disabled>公開
+					</span> <span th:unless="${product.publicStatus}"> <input
+							type="checkbox" id="publicStatus" name="publicStatus"
+							value="true" disabled>非公開
+					</span>
+					<td>
+<!-- 						<form action="@{'/edit/' + ${product.product_id}}" method="post" > -->
+						<a th:href="@{'/attribute-edit/' + ${product.product_id}}" style="display: inline-block;"><button class="btn btn-primary">更新</button></a>
+<!-- 						</form> --> 
+
+<!-- 						<form action="/delete" method="post" style="display: inline-block;"> -->
+						<a th:href="@{'/attribute-delete/' + ${product.product_id}}" style="display: inline-block;"><button class="btn btn-danger">削除</button></a>
+<!-- 						</form> -->
+					</td>
+				</tr>
+				<!-- Các dòng dữ liệu sản phẩm khác -->
+			</tbody>
+		</table></div>
+</body>
+</html>

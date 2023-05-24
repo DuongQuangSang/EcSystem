@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Chi tiết sản phẩm</title>
+  <style>
+    /* CSS cho trang chi tiết sản phẩm */
+    .product-details {
+      display: flex;
+      align-items: flex-start;
+    }
+    
+    .product-image {
+      flex: 1;
+      max-width: 200px;
+      margin-right: 20px;
+    }
+    
+    .product-info {
+      flex: 2;
+    }
+    
+    .variation-list {
+      list-style-type: none;
+      padding: 0;
+    }
+    
+    .variation-item {
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Chi tiết sản phẩm</h1>
+  <div class="product-details">
+    <div class="product-image">
+      <img src="product-image.jpg" alt="Product Image">
+    </div>
+    <div class="product-info">
+      <h2>Sản phẩm 1</h2>
+      <p>Mô tả sản phẩm...</p>
+      <h3>Biến thể</h3>
+      <ul class="variation-list">
+        <li class="variation-item">
+          <strong>Màu sắc:</strong> Đen
+        </li>
+        <li class="variation-item">
+          <strong>Kích thước:</strong> L
+        </li>
+      </ul>
+      <p>Giá: $10</p>
+      <p>Số lượng: 5</p>
+      <button type="button">Thêm vào giỏ hàng</button>
+    </div>
+  </div>
+</body>
+</html>
