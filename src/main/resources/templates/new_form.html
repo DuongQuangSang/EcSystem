@@ -86,7 +86,7 @@ input[type="submit"]:hover {
 			<label for="start_date">Ngày bắt đầu:</label>
 			<input type="datetime-local" th:field="*{startDate}" id="start_date" name="start_date" th:value="${#dates.format(product.startDate, 'yyyy-MM-dd''T''HH:mm')}" required><br><br>
 			
-			<label for="end_date">Ngày kết thúc:</label>
+			<label for="end_date">Ngày kết thúc:</label><br><br>
 			<input type="datetime-local" th:field="*{endDate}" id="end_date" name="end_date" th:value="${#dates.format(product.endDate, 'yyyy-MM-dd''T''HH:mm')}" required><br><br>
 			
 			<label for="popular_icon">人気状態:</label>

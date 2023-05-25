@@ -2,50 +2,74 @@ package jp.dcnet.ec.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import jp.dcnet.ec.model.ProductEntity;
+import jp.dcnet.ec.obj.ProductDTO;
 import jp.dcnet.ec.repository.ProductRepository;
 
 @Service
 public class ProductService {
 	
-	@Autowired
-    public ProductRepository repo ;
+    @Autowired
+    private ProductRepository repo;
+    
+    @Autowired
+    private ModelMapper modelMapper;
+	
+    public List<ProductDTO> getAllProducts() {
+        List<ProductEntity> productEntities = repo.findAll();
+        return productEntities.stream()
+                .map(productEntity -> modelMapper.map(productEntity, ProductDTO.class))
+                .collect(Collectors.toList());
+    }	
 
-    public List<ProductEntity> getAllProducts() {
-        return repo.findAll();
+    public ProductDTO getProductById(Long productId) {
+        ProductEntity productEntity = repo.findById(productId).orElse(null);
+        if (productEntity != null) {
+            return modelMapper.map(productEntity, ProductDTO.class);
+        }
+        return null;
     }
 
-    public ProductEntity getProductById(Long product_id) {
-        return repo.findById(product_id).get();
+    public ProductDTO saveProduct(ProductDTO productDTO) {
+        ProductEntity productEntity = modelMapper.map(productDTO, ProductEntity.class);
+        ProductEntity savedProductEntity = repo.save(productEntity);
+        return modelMapper.map(savedProductEntity, ProductDTO.class);
     }
 
-    public ProductEntity saveProduct(ProductEntity product) {
-        return repo.save(product);
-    }
-
-    public void deleteProduct(Long product_id) {
-    	repo.deleteById(product_id);
+    public void deleteProduct(Long productId) {
+        repo.deleteById(productId);
     }
     
-    public List<ProductEntity> searchProductByName(String name) {
-    	return repo.findByName(name);
+    public List<ProductDTO> searchProductByName(String name) {
+        List<ProductEntity> productEntities = repo.findByName(name);
+        return productEntities.stream()
+                .map(productEntity -> modelMapper.map(productEntity, ProductDTO.class))
+                .collect(Collectors.toList());
     }
     
-    public List<ProductEntity> searchProductByTimeRange(LocalDateTime currentTime) {
-        return repo.findByStartDateBeforeAndEndDateAfter(currentTime, currentTime);
+    public List<ProductDTO> searchProductByTimeRange(LocalDateTime currentTime) {
+        List<ProductEntity> productEntities = repo.findByStartDateBeforeAndEndDateAfter(currentTime, currentTime);
+        return productEntities.stream()
+                .map(productEntity -> modelMapper.map(productEntity, ProductDTO.class))
+                .collect(Collectors.toList());
     }
     
-    public List<ProductEntity> sortByAttributeName(String attributeName) {
-    	return repo.findByAttributeName(attributeName);
+    public List<ProductDTO> sortByAttributeName(String attributeName) {
+        List<ProductEntity> productEntities = repo.findByAttributeName(attributeName);
+        return productEntities.stream()
+                .map(productEntity -> modelMapper.map(productEntity, ProductDTO.class))
+                .collect(Collectors.toList());
     }
     
-//    @Transactional
-    public ProductEntity update(ProductEntity product) {
-    	ProductEntity updateResponse = repo.save(product);
-        return updateResponse;
-    }
+//    public ProductDTO update(ProductDTO productDTO) {
+//        ProductEntity productEntity = modelMapper.map(productDTO, ProductEntity.class);
+//        ProductEntity updatedProductEntity = repo.save(productEntity);
+//        return modelMapper.map(updatedProductEntity, ProductDTO.class);
+//    }
 }

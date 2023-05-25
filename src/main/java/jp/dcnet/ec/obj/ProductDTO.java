@@ -1,58 +1,33 @@
-package jp.dcnet.ec.model;
+package jp.dcnet.ec.obj;
 
 import java.time.LocalDateTime;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import org.springframework.format.annotation.DateTimeFormat;
 
-@Entity
-@Table(name = "product")
-public class ProductEntity {
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "product_id")
-	private long productId;
-
-	@Column(name = "name")
-	private String name;
-	
-	@Column(name = "description")
-	private String description;
-	
-	@Column(name = "attribute_name")
-	private String attributeName;
-
-	@Column(name = "attribute_value")
-	private String attributeValue;
-
-	@Column(name = "public_status")
-	private boolean publicStatus;
-
-	@Column(name = "start_date")
-	private LocalDateTime startDate;
-
-	@Column(name = "end_date")
-	private LocalDateTime endDate;
-
-	@Column(name = "new_icon")
-	private boolean newIcon;
-
-	@Column(name = "popular_icon")
-	private boolean popularIcon;
-
-	public ProductEntity() {
+public class ProductDTO {
+	private Long productId;
+    private String name;
+    private String description;
+    private String attributeName;
+    private String attributeValue;
+    private boolean publicStatus;
+    
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    private LocalDateTime startDate;
+    
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    private LocalDateTime endDate;
+    private boolean newIcon;
+    private boolean popularIcon;
+    
+	public ProductDTO() {
 	}
 
-	public long getProductId() {
+	public Long getProductId() {
 		return productId;
 	}
 
-	public void setProductId(long productId) {
+	public void setProductId(Long productId) {
 		this.productId = productId;
 	}
 

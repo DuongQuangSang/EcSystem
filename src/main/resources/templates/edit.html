@@ -71,7 +71,7 @@ input[type="submit"]:hover {
 		<form action="#" th:action="@{/insert}" th:object="${product}"
 			method="post">
 			<label for="id">商品ID:</label>
-			<input type="text" th:field="*{product_id}" readonly="readonly" id="product_id" name="product_id"><br><br>
+			<input type="text" th:field="*{productId}" readonly="readonly" id="product_id" name="product_id"><br><br>
 			<label for="name">商品名:</label>
 			<input type="text" th:field="*{name}" id="name" name="name" required><br><br>
 			<label for="description">商品の詳細説明:</label>
