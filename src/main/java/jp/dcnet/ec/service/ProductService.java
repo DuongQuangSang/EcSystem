@@ -20,7 +20,7 @@ public class ProductService {
     
     @Autowired
     private ModelMapper modelMapper;
-	
+    // Entity => ProductDTO
     public List<ProductDTO> getAllProducts() {
         List<ProductEntity> productEntities = repo.findAll();
         return productEntities.stream()
@@ -66,10 +66,4 @@ public class ProductService {
                 .map(productEntity -> modelMapper.map(productEntity, ProductDTO.class))
                 .collect(Collectors.toList());
     }
-    
-//    public ProductDTO update(ProductDTO productDTO) {
-//        ProductEntity productEntity = modelMapper.map(productDTO, ProductEntity.class);
-//        ProductEntity updatedProductEntity = repo.save(productEntity);
-//        return modelMapper.map(updatedProductEntity, ProductDTO.class);
-//    }
 }
