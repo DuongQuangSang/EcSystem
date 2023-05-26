@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Thiết lập giá bán</title>
+</head>
+<body>
+  <h1>Thiết lập giá bán</h1>
+
+  <h2>Giá theo thành viên</h2>
+  <form>
+    <label for="memberId">Mã thành viên:</label>
+    <input type="text" id="memberId" name="memberId">
+
+    <label for="sellSet">Cho phép bán:</label>
+    <input type="checkbox" id="sellSet" name="sellSet">
+
+    <label for="price">Giá:</label>
+    <input type="text" id="price" name="price">
+
+    <label for="startDate">Ngày bắt đầu:</label>
+    <input type="date" id="startDate" name="startDate">
+
+    <label for="endDate">Ngày kết thúc:</label>
+    <input type="date" id="endDate" name="endDate">
+
+    <button type="submit">Lưu</button>
+  </form>
+
+  <h2>Giá theo hạng</h2>
+  <form>
+    <label for="membershipLevel">Hạng thành viên:</label>
+    <select id="membershipLevel" name="membershipLevel">
+      <option value="bronze">Bronze</option>
+      <option value="silver">Silver</option>
+      <option value="gold">Gold</option>
+    </select>
+
+    <label for="price">Giá:</label>
+    <input type="text" id="price" name="price">
+
+    <label for="startDate">Ngày bắt đầu:</label>
+    <input type="date" id="startDate" name="startDate">
+
+    <label for="endDate">Ngày kết thúc:</label>
+    <input type="date" id="endDate" name="endDate">
+
+    <button type="submit">Lưu</button>
+  </form>
+</body>
+</html>

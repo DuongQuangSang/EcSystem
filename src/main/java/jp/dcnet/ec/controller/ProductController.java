@@ -80,7 +80,7 @@ public class ProductController {
 		return "redirect:/";
 	}
 
-	@PostMapping(value = "/search")
+	@PostMapping("/search")
 	public String searchProductResults(@RequestParam("searchTerm") String searchTerm, Model model) {
 		List<ProductDTO> searchResult = productService.searchProductByName(searchTerm);
 		model.addAttribute("listProductDTO", searchResult);

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>商品管理</title>
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+	<div class="container">
+		<a href="http://localhost:8081/pricemember"><h1>会員別価格</h1></a>
+		<div class="text-right">
+			
+			<form action="/memberprice-search" method="post" style="display: inline-block;">
+				<input type="text" name="searchTerm" placeholder="Enter product name" />
+				<button class="btn btn-success">検索
+				</button>
+			</form>
+<!-- 			<form action="/memberprice-new" method="post" style="display: inline-block;"> -->
+<!-- 				<button class="btn btn-success">挿入 -->
+<!-- 				</button> -->
+<!-- 			</form> -->
+			<form action="/memberprice-show" method="post" style="display: inline-block;">
+				<button class="btn btn-success">一覧
+				</button>
+			</form>
+		</div>
+		<table class="table" style="margin-top:30px;">
+			<thead>
+				<tr>
+					<th>会員ID</th>
+					<th>商品ID</th>
+					<th>商品名</th>
+					<th>販売設定</th>
+					<th>会員ごとの価格</th>
+					<th>会員ランク</th>
+					<th>会員ランクの価格</th>
+					<th>行動</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="member : ${listMemberPriceDTO}">
+					<td th:text="${member.memberId}"></td>
+					<td th:text="${member.product.productId}"></td>
+					<td th:text="${member.product.name}"></td>
+					<td><span th:if="${member.sellSet}"> <input
+							type="checkbox" id="sellSet" name="sellSet"
+							value="true" checked disabled>販売する
+					</span> <span th:unless="${member.sellSet}"> <input
+							type="checkbox" id="sellSet" name="sellSet"
+							value="true" disabled>販売しない
+					</span>
+					<td th:text="${member.price}"></td>
+					<td th:text="${member.rank}"></td>
+					<td th:text="${member.price - (member.price * (member.rank == 'A' ? 0.20 : (member.rank == 'B' ? 0.15 : (member.rank == 'C' ? 0.10 : 0.07))))}"></td>
+					<td>
+						<form  th:action="@{/memberprice-edit/{memberId}(memberId=${member.memberId})}" method="post" style="display: inline-block;">
+						<button class="btn btn-primary">更新</button>
+						</form>
+
+						<form  th:action="@{/memberprice-delete/{memberId}(memberId=${member.memberId})}" method="post" style="display: inline-block;">
+						<button class="btn btn-danger">削除</button>
+						</form>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+
+	</div>
+	<script src="script.js"></script>
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+	<script
+		src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</body>
+</html>
