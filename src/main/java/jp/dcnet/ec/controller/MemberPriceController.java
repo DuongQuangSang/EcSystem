@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import jp.dcnet.ec.obj.MemberPriceDTO;
+import jp.dcnet.ec.obj.ProductDTO;
 import jp.dcnet.ec.service.MemberPriceService;
 @Controller	
 public class MemberPriceController {
@@ -47,17 +48,21 @@ public class MemberPriceController {
 	@PostMapping("/memberprice-edit/{memberId}")
 	public ModelAndView editProduct(@PathVariable(name = "memberId") long memberId) {
 		ModelAndView mav = new ModelAndView("editMemberPrice");
-
-		MemberPriceDTO memberPriceDTO = memberPriceService.getProductById(memberId);
-		mav.addObject("member", memberPriceDTO);
-
+		
+		 MemberPriceDTO memberPriceDTO = memberPriceService.getProductById(memberId);
+		 ProductDTO productDTO = memberPriceDTO.getProduct();
+		    
+		 mav.addObject("member", memberPriceDTO);
+		 mav.addObject("product", productDTO);
+		
 		return mav;
 	}
 	
-	@PostMapping(value = "/insert-memberprice")
-	public String insertProduct(@ModelAttribute("member") MemberPriceDTO memberPriceDTO) {
-		memberPriceService.saveProduct(memberPriceDTO);
-		return "redirect:/";
-		
+	@PostMapping("/insert-memberprice")
+	public String insertProduct(@ModelAttribute("member") MemberPriceDTO memberPriceDTO, @ModelAttribute("product") ProductDTO productDTO, Model model) {
+	    memberPriceService.saveMemberPrice(memberPriceDTO);	
+	    List<MemberPriceDTO> listMemberPriceDTO = memberPriceService.getAllProducts();
+		model.addAttribute("listMemberPriceDTO",listMemberPriceDTO);
+		return "setpricemember";
 	}
 }

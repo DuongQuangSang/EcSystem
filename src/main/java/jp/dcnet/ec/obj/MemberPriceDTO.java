@@ -10,7 +10,7 @@ public class MemberPriceDTO {
     private ProductDTO product;
     private boolean sellSet;
     private BigDecimal price;
-    private char rank;
+    private String rank;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime startDate;
@@ -53,11 +53,11 @@ public class MemberPriceDTO {
         this.price = price;
     }
     
-    public char getRank() {
+    public String getRank() {
 		return rank;
 	}
 
-	public void setRank(char rank) {
+	public void setRank(String rank) {
 		this.rank = rank;
 	}
 

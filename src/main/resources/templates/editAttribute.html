@@ -70,6 +70,10 @@ input[type="submit"]:hover {
 
  <form action="#" th:action="@{/attribute-insert}" th:object="${product}" method="post">
     <!-- ... -->
+    <input type="text" th:field="*{name}"/>
+    <input type="text" th:field="*{description}"/>
+    <input type="text" th:field="*{startDate}"/>
+    <input type="text" th:field="*{endDate}"/>
     <label for="attributeName">属性名:</label>
     <select id="attributeName" th:field="*{attributeName}">
 <!--         <option value="" disabled selected>Chọn thuộc tính</option> -->

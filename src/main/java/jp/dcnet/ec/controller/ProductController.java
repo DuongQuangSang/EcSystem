@@ -21,15 +21,6 @@ import jp.dcnet.ec.service.ProductService;
 public class ProductController {
 	@Autowired
 	private ProductService productService;
-
-//	@GetMapping("/")
-//	public ModelAndView viewAdminPage(Model model) {
-//		List<ProductEntity> listProduct = productService.getAllProducts();
-//		model.addAttribute("listProduct", listProduct);
-//		
-//		ModelAndView mav = new ModelAndView("qw.html");
-//		return mav;
-//	}
 	
 	@GetMapping("/")
     public String viewAdminPage(Model model) {
@@ -52,7 +43,7 @@ public class ProductController {
 		return "new_form";
 	}
 
-	@PostMapping(value = "/insert")
+	@PostMapping("/insert")
 	public String insertProduct(@ModelAttribute("product") ProductDTO productDTO) {
 		productService.saveProduct(productDTO);
 		return "redirect:/";
@@ -128,7 +119,7 @@ public class ProductController {
 		ModelAndView mav = new ModelAndView("editAttribute");
 
 		ProductDTO productDTO = productService.getProductById(productId);
-		mav.addObject("product", productDTO);
+		
 
 		List<String> attributeOptions = Arrays.asList("サイズ", "色", "プロセッサー");
 		List<String> sizeOptions = Arrays.asList("13", "14", "15.6");
@@ -138,8 +129,17 @@ public class ProductController {
 		mav.addObject("sizeOptions", sizeOptions);
 		mav.addObject("colorOptions", colorOptions);
 		mav.addObject("processorOptions", processorOptions);
-
+		mav.addObject("product", productDTO);
 		return mav;
+	}
+	
+	@PostMapping("/attribute-insert")
+	public String insertAttribute(@ModelAttribute("product") ProductDTO productDTO, Model model) {
+		productService.saveProduct(productDTO);
+		
+//		List<ProductDTO> listProduct = productService.getAllProducts();
+//		model.addAttribute("listProductDTO", listProduct);
+		return "attribute";
 	}
 
 	@PostMapping("/attribute-delete/{productId}")
@@ -154,10 +154,6 @@ public class ProductController {
 	    return "attribute";
 	}
 
-	@PostMapping(value = "/attribute-insert")
-	public String insertAttribute(@ModelAttribute("product") ProductDTO productDTO) {
-		productService.saveProduct(productDTO);
-		return "redirect:/";
-	}
+
 
 }

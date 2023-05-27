@@ -51,7 +51,7 @@ public class MemberPriceService {
 	        return null;
 	    }
 	    
-	    public MemberPriceDTO saveProduct(MemberPriceDTO memberPriceDTO) {
+	    public MemberPriceDTO saveMemberPrice(MemberPriceDTO memberPriceDTO) {
 	    	MemberPriceEntity memberPriceEntity = modelMapper.map(memberPriceDTO, MemberPriceEntity.class);
 	    	MemberPriceEntity savedMemberPriceEntity = repo.save(memberPriceEntity);
 	        return modelMapper.map(savedMemberPriceEntity, MemberPriceDTO.class);

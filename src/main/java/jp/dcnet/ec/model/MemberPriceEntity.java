@@ -37,14 +37,15 @@ public class MemberPriceEntity {
     private BigDecimal price;
     
     @Column(name = "rank")
-    private char rank;
+    private String rank;
     
     @Column(name = "start_date")
     private LocalDateTime startDate;
 
     @Column(name = "end_date")
     private LocalDateTime endDate;
-
+    
+    
     public MemberPriceEntity() {
     }
 
@@ -80,11 +81,11 @@ public class MemberPriceEntity {
         this.price = price;
     }
     
-    public char getRank() {
+    public String getRank() {
 		return rank;
 	}
 
-	public void setRank(char rank) {
+	public void setRank(String rank) {
 		this.rank = rank;
 	}
 

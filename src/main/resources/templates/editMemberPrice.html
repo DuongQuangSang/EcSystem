@@ -67,13 +67,13 @@ input[type="submit"]:hover {
 <body>
 	<div class="form-container">
 		<h1>商品情報変更</h1>
-
-		<form action="#" th:action="@{/insert}" th:object="${member}"
-			method="post">
-			<label for="member_id">会員ID:</label>
-			<input type="text" th:field="*{memberId}" readonly="readonly" id="member_id" name="member_id"><br><br>
-			<label for="product_id">商品ID:</label>
-			<input type="text" th:field="*{product.productId}" readonly="readonly" id="product_id" name="product_id"><br><br>
+<!-- 		 th:object="${member}" -->
+		<form action="#" th:action="@{/insert-memberprice}" th:object="${member}"
+			method="post"> 
+			<label for="memberId">会員ID:</label>
+			<input type="text" th:field="*{memberId}" readonly="readonly" id="memberId" name="memberId"><br><br>
+			<label for="productId">商品ID:</label>
+			<input type="text" th:field="*{product.productId}" readonly="readonly" id="productId" name="productId"><br><br>
 			<label for="name">商品名:</label>
 			<input type="text" th:field="*{product.name}" readonly="readonly" id="name" name="name" required><br><br>
 			<label for="sellSet">販売設定:</label>
@@ -82,26 +82,26 @@ input[type="submit"]:hover {
 			<input type="text" th:field="*{price}" id="price" name="price"><br><br>
 			<label for="rank">新品状態:</label>
 			<select th:field="*{rank}" id="rank" name="rank">
-			    <option value="A" th:selected="${member.rank == 'A'}">A</option>
-			    <option value="B" th:selected="${member.rank == 'B'}">B</option>
-			    <option value="C" th:selected="${member.rank == 'C'}">C</option>
-			    <option value="D" th:selected="${member.rank == 'D'}">D</option>
+			    <option value="A" th:selected="*{rank == 'A'}">A</option>
+			    <option value="B" th:selected="*{rank == 'B'}">B</option>
+			    <option value="C" th:selected="*{rank == 'C'}">C</option>
+			    <option value="D" th:selected="*{rank == 'D'}">D</option>
 			</select>
 			<br><br>
 			
-			<label for="start_date">表示開始日時</label>
-			<input type="datetime-local" th:field="*{startDate}" id="start_date" name="start_date" required>
+			<label for="startDate">表示開始日時</label>
+			<input type="datetime-local" th:field="*{startDate}" id="startDate" name="startDate" required>
 				<script th:inline="javascript">
 			    var startDate = /*[[${#temporals.format(member.startDate, 'yyyy-MM-dd''T''HH:mm')}]]*/ '';
-			    document.getElementById('start_date').value = startDate;
+			    document.getElementById('startDate').value = startDate;
 			    </script>
     		<br><br>
 			
-			<label for="end_date">表示終了日時</label>
-			<input type="datetime-local" th:field="*{endDate}" id="end_date" name="end_date" required>
+			<label for="endDate">表示終了日時</label>
+			<input type="datetime-local" th:field="*{endDate}" id="endDate" name="endDate" required>
 			<script th:inline="javascript">
 			    var endDate = /*[[${#temporals.format(member.endDate, 'yyyy-MM-dd''T''HH:mm')}]]*/ '';
-			    document.getElementById('end_date').value = endDate;
+			    document.getElementById('endDate').value = endDate;
 			</script>
 			<br><br>
 			<input type="submit" value="更新">
