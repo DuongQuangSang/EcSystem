@@ -29,7 +29,7 @@ public class UserService {
 	        	if(getPasswordById(userId).equals(password)) {
 	        		userEntity.setPassword(shinpassword);
 	        		repo.save(userEntity);
-	        		UserDTO userDTO = modelMapper.map(userEntity,UserDTO.class);
+//	        		UserDTO userDTO = modelMapper.map(userEntity,UserDTO.class);
 	        	}
 	        } else {
 	        	throw new UserNotFoundException("User not found");
@@ -69,6 +69,14 @@ public class UserService {
 	        return null;
 	    }
 	    
+	    public boolean isUserNameExist(String userName) {
+	    	UserEntity UserEntity = repo.findByUsername(userName);
+	        if (UserEntity != null) {
+	            return false;
+	        }
+	        return true;
+	    }
+	    
 	    public String getPasswordById(Long userId) {
 	    	UserEntity userEntity = repo.findById(userId).orElse(null);
 	        if (userId != null) {
@@ -76,6 +84,11 @@ public class UserService {
 	        } else {
 	            return null; 
 	        }
+	    }
+	    
+	    public void createUser(UserDTO userDTO) {
+	    	UserEntity userEntity = modelMapper.map(userDTO, UserEntity.class);
+	        repo.save(userEntity);
 	    }
 }
 

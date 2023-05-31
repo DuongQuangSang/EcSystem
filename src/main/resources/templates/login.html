@@ -52,7 +52,7 @@ input[type="submit"]:hover {
 </head>
 <body>
     <body>
-  <div class="container">
+  	<div class="container" style="margin-top: 150px;">
     <h1>ログイン</h1>
     <form action="/login-method" method="POST">
       <label for="username">ユーザー名</label>
@@ -61,7 +61,10 @@ input[type="submit"]:hover {
       <label for="password">パスワット</label>
       <input type="password" id="password" name="password" required><br><br>
 
-      <input type="submit" value="Đăng nhập">
+      <input type="submit" value="ログイン">
+    </form>
+    <form action="/signUp" method="GET" style="margin-top:20px;">
+    	<input type="submit" value="登録">
     </form>
   </div>
 	<script src="script.js"></script>

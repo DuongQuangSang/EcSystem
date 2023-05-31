@@ -58,8 +58,6 @@ public class UserController {
 		Long userId = (Long) session.getAttribute("userId");
 		session.setAttribute("username", username);
 		session.setAttribute("userId", userId);
-//		model.addAttribute("username", username);
-//		model.addAttribute("userId", userId);
 		return "user_change_password";
 	}
 	
@@ -81,7 +79,7 @@ public class UserController {
 		return "redirect:/user/"+username;
 	}
 	
-	@PostMapping("/user_save")
+	@PostMapping("/userSave")
 	public String saveUser(UserDTO userDTO,RedirectAttributes redirectAttributes,
 			@RequestParam("username") String username) {
 		try {
@@ -92,4 +90,40 @@ public class UserController {
 	    }
 		return "redirect:/user/"+ username;
 	}
+	
+	@GetMapping("/signUp")
+	public String signUpView() {
+		return "signup";
+	}
+	
+	 @PostMapping("/creatUser")
+	    public String saveUserForm(@RequestParam("username") String username,
+	                           @RequestParam("password") String password,
+	                           @RequestParam("kakuninpassword") String kakuninpassword,
+	                           @RequestParam("email") String email,
+	                           @RequestParam("firstname") String firstname,
+	                           @RequestParam("lastname") String lastname,
+	                           @RequestParam("address") String address,
+	                           @RequestParam("phonenumber") String phoneNumber,
+	                           RedirectAttributes redirectAttributes) {
+	        UserDTO userDTO = new UserDTO();
+	        userDTO.setUsername(username);
+	        userDTO.setPassword(password);
+	        userDTO.setEmail(email);
+	        userDTO.setFirstname(firstname);
+	        userDTO.setLastname(lastname);
+	        userDTO.setAddress(address);
+	        userDTO.setPhonenumber(phoneNumber);
+	        if(password.contentEquals(kakuninpassword)&&userService.isUserNameExist(username)) {
+	        	try {
+		            userService.createUser(userDTO);
+		            redirectAttributes.addFlashAttribute("successMessage", "User created successfully");
+		        } catch (UserNotFoundException e) {
+		            redirectAttributes.addFlashAttribute("errorMessage", "Failed to create user");
+		        }
+	        	return "redirect:/user/"+ username;
+	        }
+	        redirectAttributes.addFlashAttribute("errorMessage", "Failed to create user");
+			return "signup";
+	    }
 }
