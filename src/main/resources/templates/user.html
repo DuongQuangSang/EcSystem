@@ -49,12 +49,12 @@
 </head>
 <body>
   <h1>Thay đổi thông tin người dùng</h1>
-  <form action="user" method="POST">
+  <form action="/user_save" method="POST">
     <label for="username">ユーザー名：</label>
-    <input th:value="${userDTO.username}" id="username" name="username" style="display: inline-block;" required>
+    <input th:value="${userDTO.username}" readonly id="username" name="username" style="display: inline-block;" required>
 
     <label for="password">パスワット：</label>
-    <input th:value="${userDTO.password}" type="password" id="password" name="password" required>
+    <input th:value="${userDTO.password}" readonly type="password" id="password" name="password" required>
     
     
     
@@ -75,10 +75,10 @@
 
     <input type="submit" value="保存">
   </form>
-  <form action="/change_password_page" method="GET"  style="display: inline-block;">
+  <form action="/change_password" method="GET"  style="display: inline-block;">
 	<input type="submit" value="パスワット変更" style="position: absolute;
     top: 618px;
-    right: 658px;">
+    right: 775px;">
 	</form>
       
 	<script src="script.js"></script>
