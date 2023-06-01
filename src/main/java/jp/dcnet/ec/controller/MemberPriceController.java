@@ -17,52 +17,61 @@ import org.springframework.web.servlet.ModelAndView;
 import jp.dcnet.ec.obj.MemberPriceDTO;
 import jp.dcnet.ec.obj.ProductDTO;
 import jp.dcnet.ec.service.MemberPriceService;
-@Controller	
+
+@Controller
 public class MemberPriceController {
-	@Autowired
-	private MemberPriceService memberPriceService;
-	
-	@GetMapping("/pricemember")
+    // Bổ sung comment
+    // メンバープライスサービスの自動ワイヤリング
+    @Autowired
+    private MemberPriceService memberPriceService;
+
+    // 管理者ページを表示するGETメソッド
+    @GetMapping("/pricemember")
     public String viewAdminPage(Model model) {
-		List<MemberPriceDTO> listMemberPriceDTO = memberPriceService.getAllProducts();
-		model.addAttribute("listMemberPriceDTO",listMemberPriceDTO);
+        List<MemberPriceDTO> listMemberPriceDTO = memberPriceService.getAllProducts();
+        model.addAttribute("listMemberPriceDTO", listMemberPriceDTO);
         return "setpricemember";
     }
-	
-	@PostMapping("/memberprice-search")
-	public String searchResults(@RequestParam("searchTerm") long searchTerm, Model model) {
-	    Optional<MemberPriceDTO> memberPriceDTOOptional = memberPriceService.searchMemberPriceById(searchTerm);
-		MemberPriceDTO memberPriceDTO = memberPriceDTOOptional.orElse(null);
-		model.addAttribute("listMemberPriceDTO", memberPriceDTO);
-		return "setpricemember";
-	}
-	
-	@PostMapping("/memberprice-show")
-	public String showMemberPrice(Model model) {
-		LocalDateTime currentTime = LocalDateTime.now();
-		List<MemberPriceDTO> listProduct = memberPriceService.searchProductByTimeRange(currentTime);
-		model.addAttribute("listMemberPriceDTO", listProduct);
-		return "setpricemember";
-	}
-	
-	@PostMapping("/memberprice-edit/{memberId}")
-	public ModelAndView editProduct(@PathVariable(name = "memberId") long memberId) {
-		ModelAndView mav = new ModelAndView("editMemberPrice");
-		
-		 MemberPriceDTO memberPriceDTO = memberPriceService.getProductById(memberId);
-		 ProductDTO productDTO = memberPriceDTO.getProduct();
-		    
-		 mav.addObject("member", memberPriceDTO);
-		 mav.addObject("product", productDTO);
-		
-		return mav;
-	}
-	
-	@PostMapping("/insert-memberprice")
-	public String insertProduct(@ModelAttribute("member") MemberPriceDTO memberPriceDTO, @ModelAttribute("product") ProductDTO productDTO, Model model) {
-	    memberPriceService.saveMemberPrice(memberPriceDTO);	
-	    List<MemberPriceDTO> listMemberPriceDTO = memberPriceService.getAllProducts();
-		model.addAttribute("listMemberPriceDTO",listMemberPriceDTO);
-		return "setpricemember";
-	}
+
+    // メンバープライスの検索結果を表示するPOSTメソッド
+    @PostMapping("/memberprice-search")
+    public String searchResults(@RequestParam("searchTerm") long searchTerm, Model model) {
+        Optional<MemberPriceDTO> memberPriceDTOOptional = memberPriceService.searchMemberPriceById(searchTerm);
+        MemberPriceDTO memberPriceDTO = memberPriceDTOOptional.orElse(null);
+        model.addAttribute("listMemberPriceDTO", memberPriceDTO);
+        return "setpricemember";
+    }
+
+    // メンバープライスを表示するPOSTメソッド
+    @PostMapping("/memberprice-show")
+    public String showMemberPrice(Model model) {
+        LocalDateTime currentTime = LocalDateTime.now();
+        List<MemberPriceDTO> listProduct = memberPriceService.searchProductByTimeRange(currentTime);
+        model.addAttribute("listMemberPriceDTO", listProduct);
+        return "setpricemember";
+    }
+
+    // メンバープライスの編集ページを表示するPOSTメソッド
+    @PostMapping("/memberprice-edit/{memberId}")
+    public ModelAndView editProduct(@PathVariable(name = "memberId") long memberId) {
+        ModelAndView mav = new ModelAndView("editMemberPrice");
+
+        MemberPriceDTO memberPriceDTO = memberPriceService.getProductById(memberId);
+        ProductDTO productDTO = memberPriceDTO.getProduct();
+
+        mav.addObject("member", memberPriceDTO);
+        mav.addObject("product", productDTO);
+
+        return mav;
+    }
+
+    // メンバープライスを挿入するPOSTメソッド
+    @PostMapping("/insert-memberprice")
+    public String insertProduct(@ModelAttribute("member") MemberPriceDTO memberPriceDTO,
+            @ModelAttribute("product") ProductDTO productDTO, Model model) {
+        memberPriceService.saveMemberPrice(memberPriceDTO);
+        List<MemberPriceDTO> listMemberPriceDTO = memberPriceService.getAllProducts();
+        model.addAttribute("listMemberPriceDTO", listMemberPriceDTO);
+        return "setpricemember";
+    }
 }

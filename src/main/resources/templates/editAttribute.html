@@ -68,34 +68,27 @@ input[type="submit"]:hover {
 	<div class="form-container">
 		<h1>商品情報変更</h1>
 
- <form action="#" th:action="@{/attribute-insert}" th:object="${product}" method="post">
-    <!-- ... -->
+ <form action="#" th:action="@{/insertAttribute}" th:object="${product}" method="POST">
     <input type="text" th:field="*{name}"/>
     <input type="text" th:field="*{description}"/>
-    <input type="text" th:field="*{startDate}"/>
-    <input type="text" th:field="*{endDate}"/>
-    <label for="attributeName">属性名:</label>
+  	<input type="datetime-local" id="startDate" th:field="*{startDate}" th:value="${#dates.format(startDate, 'yyyy-MM-dd')}" />
+	<input type="datetime-local" id="endDate" th:field="*{endDate}" th:value="${#dates.format(endDate, 'yyyy-MM-dd')}" />
+ 	<label for="attributeName">属性名:</label>
     <select id="attributeName" th:field="*{attributeName}">
-<!--         <option value="" disabled selected>Chọn thuộc tính</option> -->
-<!--         <option value="size" th:selected="${product.attributeName == 'size'}">サイズ</option> -->
-<!--         <option value="color" th:selected="${product.attributeName == 'color'}">色</option> -->
-<!--         <option value="processor" th:selected="${product.attributeName == 'processor'}">プロセッサー</option> -->
         <option th:each="option : ${attributeOptions}" th:value="${option}" th:selected="${option == product.attributeName}" th:text="${option}"></option>
     </select>
-    
+
     <label for="attributeValue">属性の値:</label>
     <select id="attributeValue" th:field="*{attributeValue}">
-<!--         <option value="" disabled selected>Chọn giá trị</option> -->
-        <option th:each="sizeOption : ${sizeOptions}" th:value="${sizeOption}" th:selected="${product.attributeValue == sizeOption}" th:text="${sizeOption}"></option>
-        <option th:each="colorOption : ${colorOptions}" th:value="${colorOption}" th:selected="${product.attributeValue == colorOption}" th:text="${colorOption}"></option>
-        <option th:each="processorOption : ${processorOptions}" th:value="${processorOption}" th:selected="${product.attributeValue == processorOption}" th:text="${processorOption}"></option>
+        <option th:if="${product.attributeName == 'サイズ'}" th:each="sizeOption : ${sizeOptions}" th:value="${sizeOption}" th:selected="${product.attributeValue == sizeOption}" th:text="${sizeOption}"></option>
+        <option th:if="${product.attributeName == '色'}" th:each="colorOption : ${colorOptions}" th:value="${colorOption}" th:selected="${product.attributeValue == colorOption}" th:text="${colorOption}"></option>
+        <option th:if="${product.attributeName == 'プロセッサー'}" th:each="processorOption : ${processorOptions}" th:value="${processorOption}" th:selected="${product.attributeValue == processorOption}" th:text="${processorOption}"></option>
     </select>
-    <!-- ... -->
 
     <br>
     <br>
     <input type="submit" value="更新">
-  </form>
+</form>
 	</div>
 	<script src="script.js"></script>
 	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>

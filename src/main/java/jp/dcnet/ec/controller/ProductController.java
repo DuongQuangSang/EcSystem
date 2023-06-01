@@ -22,6 +22,7 @@ public class ProductController {
 	@Autowired
 	private ProductService productService;
 	
+	// ホームページを表示するためのメソッド
 	@GetMapping("/")
     public String viewAdminPage(Model model) {
 		List<ProductDTO> listProductDTO = productService.getAllProducts();
@@ -29,13 +30,8 @@ public class ProductController {
         return "index";
     }
 
-//	@RequestMapping("/detail")
-//	public String viewDetail(Model model) {
-//		List<ProductEntity> listProduct = productService.getAllProducts();
-//		model.addAttribute("listProduct", listProduct);
-//		return "detail";
-//	}
-//
+	
+	// 新しい商品を作成するためのメソッド
 	@PostMapping(value = "/new")
 	public String newProduct(Model model) {
 		ProductDTO productDTO = new ProductDTO();
@@ -43,18 +39,24 @@ public class ProductController {
 		return "new_form";
 	}
 
+	
+	// 新しい商品を保存するためのメソッド
 	@PostMapping("/insert")
 	public String insertProduct(@ModelAttribute("product") ProductDTO productDTO) {
+
+	    if (productDTO.getAttributeName() == null || productDTO.getAttributeValue() == null) {
+
+	        ProductDTO existingProduct = productService.getProductById(productDTO.getProductId());
+
+	        productDTO.setAttributeName(existingProduct.getAttributeName());
+	        productDTO.setAttributeValue(existingProduct.getAttributeValue());
+	    }
 		productService.saveProduct(productDTO);
 		return "redirect:/";
 	}
 
-//	@PostMapping(value = "/update")
-//	public String updateProduct(@ModelAttribute("product") ProductDTO productDTO) {
-//		productService.update(productDTO);
-//		return "redirect:/";
-//	}
-
+	
+	// 商品を編集するためのメソッド
 	@PostMapping("/edit/{productId}")
 	public ModelAndView editProduct(@PathVariable(name = "productId") long productId) {
 		ModelAndView mav = new ModelAndView("edit");
@@ -65,12 +67,16 @@ public class ProductController {
 		return mav;
 	}
 
+	
+	// 商品を削除するためのメソッド
 	@PostMapping("/delete/{productId}")
 	public String deleteProduct(@PathVariable(name = "productId") long productId) {
 		productService.deleteProduct(productId);
 		return "redirect:/";
 	}
 
+	
+	// 商品を検索するためのメソッド
 	@PostMapping("/search")
 	public String searchProductResults(@RequestParam("searchTerm") String searchTerm, Model model) {
 		List<ProductDTO> searchResult = productService.searchProductByName(searchTerm);
@@ -78,6 +84,8 @@ public class ProductController {
 		return "index";
 	}
 
+	
+	// 商品を表示するためのメソッド
 	@PostMapping("/show")
 	public String showProduct(Model model) {
 		LocalDateTime currentTime = LocalDateTime.now();
@@ -86,6 +94,8 @@ public class ProductController {
 		return "index";
 	}
 
+	
+	// 属性を表示するためのメソッド
 	@PostMapping("/attribute")
 	public String viewAttribute(Model model) {
 		List<ProductDTO> listProduct = productService.getAllProducts();
@@ -93,6 +103,8 @@ public class ProductController {
 		return "attribute";
 	}
 
+	
+	// 属性「プロセッサー」の商品を表示するためのメソッド
 	@GetMapping("/attribute-chip")
 	public String viewAttributeChip(Model model) {
 		List<ProductDTO> listProduct = productService.sortByAttributeName("プロセッサー");
@@ -100,6 +112,8 @@ public class ProductController {
 		return "attribute";
 	}
 
+	
+	// 属性「色」の商品を表示するためのメソッド
 	@GetMapping("/attribute-color")
 	public String viewAttributeColor(Model model) {
 		List<ProductDTO> listProduct = productService.sortByAttributeName("色");
@@ -107,6 +121,8 @@ public class ProductController {
 		return "attribute";
 	}
 
+	
+	// 属性「サイズ」の商品を表示するためのメソッド
 	@GetMapping("/attribute-size")
 	public String viewAttributeSize(Model model) {
 		List<ProductDTO> listProduct = productService.sortByAttributeName("サイズ");
@@ -114,46 +130,49 @@ public class ProductController {
 		return "attribute";
 	}
 
-	@GetMapping("/attribute-edit/{productId}")
+	
+	// 属性を編集するためのメソッド
+	@PostMapping("/attribute-edit/{productId}")
 	public ModelAndView editAttribute(@PathVariable(name = "productId") long productId) {
-		ModelAndView mav = new ModelAndView("editAttribute");
+	    ModelAndView mav = new ModelAndView("editAttribute");
 
-		ProductDTO productDTO = productService.getProductById(productId);
-		
+	    ProductDTO productDTO = productService.getProductById(productId);
 
-		List<String> attributeOptions = Arrays.asList("サイズ", "色", "プロセッサー");
-		List<String> sizeOptions = Arrays.asList("13", "14", "15.6");
-		List<String> colorOptions = Arrays.asList("黒", "白", "グレー");
-		List<String> processorOptions = Arrays.asList("Intel", "Ryzen");
-		mav.addObject("attributeOptions", attributeOptions);
-		mav.addObject("sizeOptions", sizeOptions);
-		mav.addObject("colorOptions", colorOptions);
-		mav.addObject("processorOptions", processorOptions);
-		mav.addObject("product", productDTO);
-		return mav;
+	    List<String> attributeOptions = Arrays.asList("サイズ", "色", "プロセッサー");
+	    List<String> sizeOptions = Arrays.asList("13", "14", "15.6");
+	    List<String> colorOptions = Arrays.asList("黒", "白", "グレー");
+	    List<String> processorOptions = Arrays.asList("Intel", "Ryzen");
+
+	    mav.addObject("attributeOptions", attributeOptions);
+	    mav.addObject("sizeOptions", sizeOptions);
+	    mav.addObject("colorOptions", colorOptions);
+	    mav.addObject("processorOptions", processorOptions);
+	    mav.addObject("product", productDTO);
+	    mav.addObject("selectedAttributeOption", productDTO.getAttributeName());
+
+	    return mav;
 	}
 	
-	@PostMapping("/attribute-insert")
+	
+	// 属性を保存するためのメソッド
+	@PostMapping("/insertAttribute")
 	public String insertAttribute(@ModelAttribute("product") ProductDTO productDTO, Model model) {
 		productService.saveProduct(productDTO);
-		
-//		List<ProductDTO> listProduct = productService.getAllProducts();
-//		model.addAttribute("listProductDTO", listProduct);
 		return "attribute";
 	}
 
+	
+	// 属性を削除するためのメソッド
 	@PostMapping("/attribute-delete/{productId}")
 	public String deleteAttribute(@PathVariable(name = "productId") long productId) {
 		productService.deleteProduct(productId);
-
 		return "redirect:/attribute";
 	}
 	
+	
+	// 属性を削除するフォームを表示するためのメソッド
 	@GetMapping("/attribute-delete/{productId}")
 	public String deleteAttributeForm(@PathVariable(name = "productId") long productId) {
 	    return "attribute";
 	}
-
-
-
 }
