@@ -44,7 +44,10 @@ public class ProductEntity {
 
 	@Column(name = "popular_icon")
 	private boolean popularIcon;
-
+	
+	@Column(name = "suggest")
+	private boolean suggest;
+	
 	public ProductEntity() {
 	}
 
@@ -126,6 +129,14 @@ public class ProductEntity {
 
 	public void setPopularIcon(boolean popularIcon) {
 		this.popularIcon = popularIcon;
+	}
+
+	public boolean isSuggest() {
+		return suggest;
+	}
+
+	public void setSuggest(boolean suggest) {
+		this.suggest = suggest;
 	}
 
 }

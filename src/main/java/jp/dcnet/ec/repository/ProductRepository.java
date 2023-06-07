@@ -16,4 +16,8 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
 	List<ProductEntity> findByStartDateBeforeAndEndDateAfter(LocalDateTime startDate, LocalDateTime endDate);
 
 	List<ProductEntity> findByAttributeName(String attributeName);
+	
+	List<ProductEntity> findTop8ByOrderByProductIdDesc();
+	
+	List<ProductEntity> findBySuggest(boolean suggest);
 }

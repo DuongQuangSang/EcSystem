@@ -11,6 +11,7 @@ public class ProductDTO {
     private String attributeName;
     private String attributeValue;
     private boolean publicStatus;
+    private boolean suggest;
     
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime startDate;
@@ -103,4 +104,12 @@ public class ProductDTO {
 		this.popularIcon = popularIcon;
 	}
 
+	public boolean isSuggest() {
+		return suggest;
+	}
+
+	public void setSuggest(boolean suggest) {
+		this.suggest = suggest;
+	}
+	
 }

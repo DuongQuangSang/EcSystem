@@ -175,4 +175,14 @@ public class ProductController {
 	public String deleteAttributeForm(@PathVariable(name = "productId") long productId) {
 	    return "attribute";
 	}
+	
+	@GetMapping("/top_page")
+	public String showTopPage(Model model) {
+		List<ProductDTO> arrivalProductDTO = productService.getArrivalProducts();
+		model.addAttribute("arrivalProductDTO",arrivalProductDTO);
+		
+		List<ProductDTO> suggestProductDTO = productService.getSuggestProducts();
+		model.addAttribute("suggestProductDTO",suggestProductDTO);
+        return "top_page";
+	}
 }

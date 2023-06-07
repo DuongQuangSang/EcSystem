@@ -106,4 +106,22 @@ public class ProductService {
                 .map(productEntity -> modelMapper.map(productEntity, ProductDTO.class))
                 .collect(Collectors.toList());
     }
+    
+    
+    /**
+     * すすめの商品を取得します。
+     */
+    public List<ProductDTO> getArrivalProducts() {
+        List<ProductEntity> arrivalProductEntities = repo.findTop8ByOrderByProductIdDesc();	
+        return arrivalProductEntities.stream()
+                .map(productEntity -> modelMapper.map(productEntity, ProductDTO.class))
+                .collect(Collectors.toList());
+    }
+    
+    public List<ProductDTO> getSuggestProducts() {
+        List<ProductEntity> suggestProductEntities = repo.findBySuggest(true);	
+        return suggestProductEntities.stream()
+                .map(productEntity -> modelMapper.map(productEntity, ProductDTO.class))
+                .collect(Collectors.toList());
+    }
 }
