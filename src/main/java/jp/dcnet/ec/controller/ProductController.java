@@ -11,13 +11,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import jp.dcnet.ec.obj.ProductDTO;
 import jp.dcnet.ec.service.ProductService;
 
-@Controller	
+@Controller
+@RequestMapping("admin")
 public class ProductController {
 	@Autowired
 	private ProductService productService;
@@ -27,7 +29,7 @@ public class ProductController {
     public String viewAdminPage(Model model) {
 		List<ProductDTO> listProductDTO = productService.getAllProducts();
 		model.addAttribute("listProductDTO",listProductDTO);
-        return "index";
+        return "admin/index";
     }
 
 	
@@ -36,7 +38,7 @@ public class ProductController {
 	public String newProduct(Model model) {
 		ProductDTO productDTO = new ProductDTO();
 		model.addAttribute("product", productDTO);
-		return "new_form";
+		return "admin/new_form";
 	}
 
 	
@@ -81,7 +83,7 @@ public class ProductController {
 	public String searchProductResults(@RequestParam("searchTerm") String searchTerm, Model model) {
 		List<ProductDTO> searchResult = productService.searchProductByName(searchTerm);
 		model.addAttribute("listProductDTO", searchResult);
-		return "index";
+		return "admin/index";
 	}
 
 	
@@ -91,7 +93,7 @@ public class ProductController {
 		LocalDateTime currentTime = LocalDateTime.now();
 		List<ProductDTO> listProduct = productService.searchProductByTimeRange(currentTime);
 		model.addAttribute("listProductDTO", listProduct);
-		return "index";
+		return "admin/index";
 	}
 
 	
@@ -100,7 +102,7 @@ public class ProductController {
 	public String viewAttribute(Model model) {
 		List<ProductDTO> listProduct = productService.getAllProducts();
 		model.addAttribute("listProductDTO", listProduct);
-		return "attribute";
+		return "admin/attribute";
 	}
 
 	
@@ -109,7 +111,7 @@ public class ProductController {
 	public String viewAttributeChip(Model model) {
 		List<ProductDTO> listProduct = productService.sortByAttributeName("プロセッサー");
 		model.addAttribute("listProductDTO", listProduct);
-		return "attribute";
+		return "admin/attribute";
 	}
 
 	
@@ -118,7 +120,7 @@ public class ProductController {
 	public String viewAttributeColor(Model model) {
 		List<ProductDTO> listProduct = productService.sortByAttributeName("色");
 		model.addAttribute("listProductDTO", listProduct);
-		return "attribute";
+		return "admin/attribute";
 	}
 
 	
@@ -127,7 +129,7 @@ public class ProductController {
 	public String viewAttributeSize(Model model) {
 		List<ProductDTO> listProduct = productService.sortByAttributeName("サイズ");
 		model.addAttribute("listProductDTO", listProduct);
-		return "attribute";
+		return "admin/attribute";
 	}
 
 	
@@ -158,7 +160,7 @@ public class ProductController {
 	@PostMapping("/insertAttribute")
 	public String insertAttribute(@ModelAttribute("product") ProductDTO productDTO, Model model) {
 		productService.saveProduct(productDTO);
-		return "attribute";
+		return "admin/attribute";
 	}
 
 	
@@ -173,16 +175,7 @@ public class ProductController {
 	// 属性を削除するフォームを表示するためのメソッド
 	@GetMapping("/attribute-delete/{productId}")
 	public String deleteAttributeForm(@PathVariable(name = "productId") long productId) {
-	    return "attribute";
+	    return "admin/attribute";
 	}
 	
-	@GetMapping("/top_page")
-	public String showTopPage(Model model) {
-		List<ProductDTO> arrivalProductDTO = productService.getArrivalProducts();
-		model.addAttribute("arrivalProductDTO",arrivalProductDTO);
-		
-		List<ProductDTO> suggestProductDTO = productService.getSuggestProducts();
-		model.addAttribute("suggestProductDTO",suggestProductDTO);
-        return "top_page";
-	}
 }

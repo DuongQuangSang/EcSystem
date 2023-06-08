@@ -1,5 +1,7 @@
 package jp.dcnet.ec.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,17 +10,23 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import jp.dcnet.ec.obj.ProductDTO;
 import jp.dcnet.ec.obj.UserDTO;
+import jp.dcnet.ec.service.ProductService;
 import jp.dcnet.ec.service.UserNotFoundException;
 import jp.dcnet.ec.service.UserService;
 
 @Controller
+@RequestMapping("user")
 public class UserController {
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private ProductService productService;
 
 	@GetMapping("/login")
 	// ユーザーページを表示するためのメソッド
@@ -133,4 +141,27 @@ public class UserController {
 		redirectAttributes.addFlashAttribute("errorMessage", "ユーザーの作成に失敗しました");
 		return "signup";
 	}
+	
+	@GetMapping("/top_page")
+	public String showTopPage(Model model) {
+		List<ProductDTO> arrivalProductDTO = productService.getArrivalProducts();
+		model.addAttribute("arrivalProductDTO",arrivalProductDTO);
+		
+		List<ProductDTO> suggestProductDTO = productService.getSuggestProducts();
+		model.addAttribute("suggestProductDTO",suggestProductDTO);
+        return "user/top_page";
+	}
+	
+	@GetMapping("/")
+	public String showIndex() {
+		return "user/index";
+	}
+	
+	@PostMapping("/search")
+	public String searchProductResults(@RequestParam("searchTerm") String searchTerm, Model model) {
+		List<ProductDTO> searchResult = productService.searchProductByName(searchTerm);
+		model.addAttribute("listProductDTO", searchResult);
+		return "user/index";
+	}
+	
 }

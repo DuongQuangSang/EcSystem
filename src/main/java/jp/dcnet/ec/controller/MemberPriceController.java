@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -19,6 +20,7 @@ import jp.dcnet.ec.obj.ProductDTO;
 import jp.dcnet.ec.service.MemberPriceService;
 
 @Controller
+@RequestMapping("pricemember")
 public class MemberPriceController {
     // Bổ sung comment
     // メンバープライスサービスの自動ワイヤリング
@@ -26,7 +28,7 @@ public class MemberPriceController {
     private MemberPriceService memberPriceService;
 
     // 管理者ページを表示するGETメソッド
-    @GetMapping("/pricemember")
+    @GetMapping("/")
     public String viewAdminPage(Model model) {
         List<MemberPriceDTO> listMemberPriceDTO = memberPriceService.getAllProducts();
         model.addAttribute("listMemberPriceDTO", listMemberPriceDTO);
@@ -34,7 +36,7 @@ public class MemberPriceController {
     }
 
     // メンバープライスの検索結果を表示するPOSTメソッド
-    @PostMapping("/memberprice-search")
+    @PostMapping("/search")
     public String searchResults(@RequestParam("searchTerm") long searchTerm, Model model) {
         Optional<MemberPriceDTO> memberPriceDTOOptional = memberPriceService.searchMemberPriceById(searchTerm);
         MemberPriceDTO memberPriceDTO = memberPriceDTOOptional.orElse(null);
@@ -43,7 +45,7 @@ public class MemberPriceController {
     }
 
     // メンバープライスを表示するPOSTメソッド
-    @PostMapping("/memberprice-show")
+    @PostMapping("/show")
     public String showMemberPrice(Model model) {
         LocalDateTime currentTime = LocalDateTime.now();
         List<MemberPriceDTO> listProduct = memberPriceService.searchProductByTimeRange(currentTime);
@@ -52,7 +54,7 @@ public class MemberPriceController {
     }
 
     // メンバープライスの編集ページを表示するPOSTメソッド
-    @PostMapping("/memberprice-edit/{memberId}")
+    @PostMapping("/edit/{memberId}")
     public ModelAndView editProduct(@PathVariable(name = "memberId") long memberId) {
         ModelAndView mav = new ModelAndView("editMemberPrice");
 
@@ -66,7 +68,7 @@ public class MemberPriceController {
     }
 
     // メンバープライスを挿入するPOSTメソッド
-    @PostMapping("/insert-memberprice")
+    @PostMapping("/insert")
     public String insertProduct(@ModelAttribute("member") MemberPriceDTO memberPriceDTO,
             @ModelAttribute("product") ProductDTO productDTO, Model model) {
         memberPriceService.saveMemberPrice(memberPriceDTO);

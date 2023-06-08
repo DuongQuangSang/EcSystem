@@ -12,7 +12,7 @@
 		<a href="http://localhost:8081/pricemember"><h1>会員別価格</h1></a>
 		<div class="text-right">
 			
-			<form action="/memberprice-search" method="post" style="display: inline-block;">
+			<form action="/search" method="post" style="display: inline-block;">
 				<input type="text" name="searchTerm" placeholder="Enter product name" />
 				<button class="btn btn-success">検索
 				</button>
@@ -21,7 +21,7 @@
 <!-- 				<button class="btn btn-success">挿入 -->
 <!-- 				</button> -->
 <!-- 			</form> -->
-			<form action="/memberprice-show" method="post" style="display: inline-block;">
+			<form action="/show" method="post" style="display: inline-block;">
 				<button class="btn btn-success">一覧
 				</button>
 			</form>
@@ -33,7 +33,7 @@
 					<th>商品ID</th>
 					<th>商品名</th>
 					<th>販売設定</th>
-					<th>会員ごとの価格</th>
+					<th>価格</th>
 					<th>会員ランク</th>
 					<th>会員ランクの価格</th>
 					<th>行動</th>
@@ -55,7 +55,7 @@
 					<td th:text="${member.rank}"></td>
 					<td th:text="${member.price - (member.price * (member.rank == 'A' ? 0.20 : (member.rank == 'B' ? 0.15 : (member.rank == 'C' ? 0.10 : 0.07))))}"></td>
 					<td>
-						<form  th:action="@{/memberprice-edit/{memberId}(memberId=${member.memberId})}" method="post" style="display: inline-block;">
+						<form  th:action="@{/edit/{memberId}(memberId=${member.memberId})}" method="post" style="display: inline-block;">
 						<button class="btn btn-primary">更新</button>
 						</form>
 
