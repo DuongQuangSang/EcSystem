@@ -21,7 +21,7 @@ import jp.dcnet.ec.service.UserNotFoundException;
 import jp.dcnet.ec.service.UserService;
 
 @Controller
-@RequestMapping("user")
+@RequestMapping("/user")
 public class UserController {
 	@Autowired
 	private UserService userService;
@@ -31,15 +31,15 @@ public class UserController {
 	@GetMapping("/login")
 	// ユーザーページを表示するためのメソッド
 	public String viewUserPage() {
-		return "login";
+		return "user/login";
 	}
 	
-	@PostMapping("/login-method")
+	@GetMapping("/login-method")
 	// ログインメソッド
 	public String login(@RequestParam("username") String username,
-						@RequestParam("password") String password,
-						HttpSession session,
-						Model model) {
+									@RequestParam("password") String password,
+									HttpSession session,
+									Model model) {
 		UserDTO userDTO = userService.login(username, password);
 		
 		if (userDTO != null) {
@@ -47,10 +47,10 @@ public class UserController {
 			session.setAttribute("username", username);
 			session.setAttribute("userId", userDTO.getUserId());
 			model.addAttribute("userDTO", userDTO);
-			return "user";
+			return "user/user";
 		} else {
 			// ログイン失敗の処理
-			return "login";
+			return "user/login";
 		}
 	}
 	
@@ -63,14 +63,14 @@ public class UserController {
 	}
 	
 	
-	@GetMapping("/change_password")
+	@GetMapping("/change-password")
 	// ユーザーパスワード変更ページを表示するためのメソッド
 	public String viewUserPasswordChange(HttpSession session, Model model) {
 		String username = (String) session.getAttribute("username");
 		Long userId = (Long) session.getAttribute("userId");
 		session.setAttribute("username", username);
 		session.setAttribute("userId", userId);
-		return "user_change_password";
+		return "user/user_change_password";
 	}
 	
 	@PostMapping("/change_password_method")
@@ -101,7 +101,7 @@ public class UserController {
 	    } catch (UserNotFoundException e) {
 	    	redirectAttributes.addFlashAttribute("errorMessage", "ユーザーが見つかりませんでした");
 	    }
-		return "redirect:/user/"+ username;
+		return "redirect:/"+ username;
 	}
 	
 	@GetMapping("/signUp")
@@ -165,3 +165,5 @@ public class UserController {
 	}
 	
 }
+
+
