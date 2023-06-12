@@ -59,7 +59,7 @@ public class UserController {
 	public String getUserPage(@PathVariable("username") String username, Model model) {
 	    UserDTO userDTO = userService.getUserByUserName(username);
 	    model.addAttribute("userDTO", userDTO);
-	    return "user";
+	    return "user/user/"+username;
 	}
 	
 	
@@ -79,29 +79,47 @@ public class UserController {
 									@RequestParam("shinpassword") String shinpassword,
 									@RequestParam("kakupassword") String kakupassword,
 									HttpSession session,
-									RedirectAttributes redirectAttributes) {
+									RedirectAttributes redirectAttributes,
+									Model model) {
 		String username = (String) session.getAttribute("username");
 		Long userId = (Long) session.getAttribute("userId");
+		UserDTO userDTO = userService.login(username, password);
 		try {
 	        userService.updatePassword(userId, password, shinpassword);
 	        redirectAttributes.addFlashAttribute("successMessage", "パスワードが正常に更新されました");
 	    } catch (UserNotFoundException e) {
 	    	redirectAttributes.addFlashAttribute("errorMessage", "ユーザーが見つかりませんでした");
 	    }
-		return "redirect:/user/"+username;
+		
+		if (userDTO != null) {
+			// ログイン成功の処理
+			session.setAttribute("username", username);
+			session.setAttribute("userId", userDTO.getUserId());
+			model.addAttribute("userDTO", userDTO);
+		}
+		return "user/user";
 	}
 	
 	@PostMapping("/userSave")
 	// ユーザー情報保存メソッド
-	public String saveUser(UserDTO userDTO, RedirectAttributes redirectAttributes,
-			@RequestParam("username") String username) {
+	public String saveUser(UserDTO userDTO, 
+										RedirectAttributes redirectAttributes,
+										HttpSession session,
+										Model model,
+										@RequestParam("username") String username) {
 		try {
 	        userService.updateUser(userDTO);
 	        redirectAttributes.addFlashAttribute("successMessage", "ユーザー情報が正常に更新されました");
 	    } catch (UserNotFoundException e) {
 	    	redirectAttributes.addFlashAttribute("errorMessage", "ユーザーが見つかりませんでした");
 	    }
-		return "redirect:/"+ username;
+		if (userDTO != null) {
+			// ログイン成功の処理
+			session.setAttribute("username", username);
+			session.setAttribute("userId", userDTO.getUserId());
+			model.addAttribute("userDTO", userDTO);
+		}
+		return "user/user";
 	}
 	
 	@GetMapping("/signUp")
@@ -157,6 +175,7 @@ public class UserController {
 		return "user/index";
 	}
 	
+	// 商品を検索するためのメソッド
 	@PostMapping("/search")
 	public String searchProductResults(@RequestParam("searchTerm") String searchTerm, Model model) {
 		List<ProductDTO> searchResult = productService.searchProductByName(searchTerm);
@@ -164,6 +183,12 @@ public class UserController {
 		return "user/index";
 	}
 	
+	@GetMapping("/order")
+	public String order(Model model) {
+		List<ProductDTO> listProductDTO = productService.getAllProducts();
+		model.addAttribute("listProductDTO",listProductDTO);
+		return "user/order";
+	}
 }
 
 

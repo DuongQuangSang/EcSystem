@@ -26,6 +26,9 @@ public class UserService {
      */
     public UserDTO login(String username, String password) {
         UserEntity userEntity = repo.userLogin(username, password);
+        if (userEntity == null) {
+        	 throw new BadRequestException("Invalid username or password");
+        }
         UserDTO userDTO = modelMapper.map(userEntity, UserDTO.class);
         return userDTO;
     }
