@@ -12,10 +12,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jp.dcnet.ec.obj.ProductDTO;
 import jp.dcnet.ec.obj.UserDTO;
+import jp.dcnet.ec.service.BadRequestException;
 import jp.dcnet.ec.service.ProductService;
 import jp.dcnet.ec.service.UserNotFoundException;
 import jp.dcnet.ec.service.UserService;
@@ -33,36 +35,42 @@ public class UserController {
 	public String viewUserPage() {
 		return "user/login";
 	}
-	
-	@GetMapping("/login-method")
+
+	@PostMapping("/login-method")
 	// ログインメソッド
 	public String login(@RequestParam("username") String username,
-									@RequestParam("password") String password,
-									HttpSession session,
-									Model model) {
-		UserDTO userDTO = userService.login(username, password);
-		
-		if (userDTO != null) {
-			// ログイン成功の処理
-			session.setAttribute("username", username);
-			session.setAttribute("userId", userDTO.getUserId());
-			model.addAttribute("userDTO", userDTO);
-			return "user/user";
-		} else {
-			// ログイン失敗の処理
-			return "user/login";
+			@RequestParam("password") String password,
+			HttpSession session,
+			Model model,
+			RedirectAttributes redirectAttributes) {
+		try {
+			UserDTO userDTO = userService.login(username, password);
+			if (userDTO != null) {
+				// ログイン成功の処理
+				session.setAttribute("username", username);
+				session.setAttribute("userId", userDTO.getUserId());
+				model.addAttribute("userDTO", userDTO);
+				return "user/user-info";
+			} else {
+				// ログイン失敗の処理
+				redirectAttributes.addFlashAttribute("errorMessage", "ログインエラー");
+				return "redirect:/user/login";
+			}
+		} catch (BadRequestException e) {
+			// Handle bad request exception
+			redirectAttributes.addFlashAttribute("errorMessage", "ログインエラー");
+			return "redirect:/user/login";
 		}
 	}
-	
+
 	@GetMapping("/user/{username}")
 	// ユーザーページを取得するためのメソッド
 	public String getUserPage(@PathVariable("username") String username, Model model) {
-	    UserDTO userDTO = userService.getUserByUserName(username);
-	    model.addAttribute("userDTO", userDTO);
-	    return "user/user/"+username;
+		UserDTO userDTO = userService.getUserByUserName(username);
+		model.addAttribute("userDTO", userDTO);
+		return "user/user-info/" + username;
 	}
-	
-	
+
 	@GetMapping("/change-password")
 	// ユーザーパスワード変更ページを表示するためのメソッド
 	public String viewUserPasswordChange(HttpSession session, Model model) {
@@ -72,73 +80,73 @@ public class UserController {
 		session.setAttribute("userId", userId);
 		return "user/user_change_password";
 	}
-	
-	@PostMapping("/change_password_method")
+
+	@PostMapping("/change-password-method")
 	// ユーザーパスワード変更メソッド
 	public String changeUserPassWord(@RequestParam("password") String password,
-									@RequestParam("shinpassword") String shinpassword,
-									@RequestParam("kakupassword") String kakupassword,
-									HttpSession session,
-									RedirectAttributes redirectAttributes,
-									Model model) {
+			@RequestParam("shinpassword") String shinpassword,
+			@RequestParam("kakupassword") String kakupassword,
+			HttpSession session,
+			RedirectAttributes redirectAttributes,
+			Model model) {
 		String username = (String) session.getAttribute("username");
 		Long userId = (Long) session.getAttribute("userId");
 		UserDTO userDTO = userService.login(username, password);
 		try {
-	        userService.updatePassword(userId, password, shinpassword);
-	        redirectAttributes.addFlashAttribute("successMessage", "パスワードが正常に更新されました");
-	    } catch (UserNotFoundException e) {
-	    	redirectAttributes.addFlashAttribute("errorMessage", "ユーザーが見つかりませんでした");
-	    }
-		
+			userService.updatePassword(userId, password, shinpassword);
+			redirectAttributes.addFlashAttribute("successMessage", "パスワードが正常に更新されました");
+		} catch (UserNotFoundException e) {
+			redirectAttributes.addFlashAttribute("errorMessage", "ユーザーが見つかりませんでした");
+		}
+
 		if (userDTO != null) {
 			// ログイン成功の処理
 			session.setAttribute("username", username);
 			session.setAttribute("userId", userDTO.getUserId());
 			model.addAttribute("userDTO", userDTO);
 		}
-		return "user/user";
+		return "user/user-info";
 	}
-	
-	@PostMapping("/userSave")
+
+	@PostMapping("/user-save")
 	// ユーザー情報保存メソッド
-	public String saveUser(UserDTO userDTO, 
-										RedirectAttributes redirectAttributes,
-										HttpSession session,
-										Model model,
-										@RequestParam("username") String username) {
+	public String saveUser(UserDTO userDTO,
+			RedirectAttributes redirectAttributes,
+			HttpSession session,
+			Model model,
+			@RequestParam("username") String username) {
 		try {
-	        userService.updateUser(userDTO);
-	        redirectAttributes.addFlashAttribute("successMessage", "ユーザー情報が正常に更新されました");
-	    } catch (UserNotFoundException e) {
-	    	redirectAttributes.addFlashAttribute("errorMessage", "ユーザーが見つかりませんでした");
-	    }
+			userService.updateUser(userDTO);
+			redirectAttributes.addFlashAttribute("successMessage", "ユーザー情報が正常に更新されました");
+		} catch (UserNotFoundException e) {
+			redirectAttributes.addFlashAttribute("errorMessage", "ユーザーが見つかりませんでした");
+		}
 		if (userDTO != null) {
 			// ログイン成功の処理
 			session.setAttribute("username", username);
 			session.setAttribute("userId", userDTO.getUserId());
 			model.addAttribute("userDTO", userDTO);
 		}
-		return "user/user";
+		return "user/user-info";
 	}
-	
-	@GetMapping("/signUp")
+
+	@GetMapping("/sign-up")
 	// サインアップページを表示するためのメソッド
 	public String signUpView() {
-		return "signup";
+		return "user/signup";
 	}
-	
-	@PostMapping("/creatUser")
+
+	@PostMapping("/creat-user")
 	// ユーザー作成フォームを保存するためのメソッド
 	public String saveUserForm(@RequestParam("username") String username,
-							   @RequestParam("password") String password,
-							   @RequestParam("kakuninpassword") String kakuninpassword,
-							   @RequestParam("email") String email,
-							   @RequestParam("firstname") String firstname,
-							   @RequestParam("lastname") String lastname,
-							   @RequestParam("address") String address,
-							   @RequestParam("phonenumber") String phoneNumber,
-							   RedirectAttributes redirectAttributes) {
+			@RequestParam("password") String password,
+			@RequestParam("kakuninpassword") String kakuninpassword,
+			@RequestParam("email") String email,
+			@RequestParam("firstname") String firstname,
+			@RequestParam("lastname") String lastname,
+			@RequestParam("address") String address,
+			@RequestParam("phonenumber") String phoneNumber,
+			RedirectAttributes redirectAttributes) {
 		UserDTO userDTO = new UserDTO();
 		userDTO.setUsername(username);
 		userDTO.setPassword(password);
@@ -154,27 +162,40 @@ public class UserController {
 			} catch (UserNotFoundException e) {
 				redirectAttributes.addFlashAttribute("errorMessage", "ユーザーの作成に失敗しました");
 			}
-			return "redirect:/user/"+ username;
+			return "redirect:/user/" + username;
 		}
 		redirectAttributes.addFlashAttribute("errorMessage", "ユーザーの作成に失敗しました");
 		return "signup";
 	}
-	
-	@GetMapping("/top_page")
+
+	@GetMapping("/top-page")
 	public String showTopPage(Model model) {
 		List<ProductDTO> arrivalProductDTO = productService.getArrivalProducts();
-		model.addAttribute("arrivalProductDTO",arrivalProductDTO);
-		
+		model.addAttribute("arrivalProductDTO", arrivalProductDTO);
+
 		List<ProductDTO> suggestProductDTO = productService.getSuggestProducts();
-		model.addAttribute("suggestProductDTO",suggestProductDTO);
-        return "user/top_page";
+		model.addAttribute("suggestProductDTO", suggestProductDTO);
+		return "user/top_page";
 	}
-	
+
 	@GetMapping("/")
-	public String showIndex() {
+	public String showIndex(Model model) {
+		List<ProductDTO> listProductDTO = productService.getAllProducts();
+		model.addAttribute("listProductDTO", listProductDTO);
 		return "user/index";
 	}
-	
+
+	// 商品を編集するためのメソッド
+	@PostMapping("/info/{productId}")
+	public ModelAndView editProduct(@PathVariable("productId") long productId) {
+		ModelAndView mav = new ModelAndView("user/product_info");
+
+		ProductDTO productDTO = productService.getProductById(productId);
+		mav.addObject("product", productDTO);
+
+		return mav;
+	}
+
 	// 商品を検索するためのメソッド
 	@PostMapping("/search")
 	public String searchProductResults(@RequestParam("searchTerm") String searchTerm, Model model) {
@@ -182,13 +203,11 @@ public class UserController {
 		model.addAttribute("listProductDTO", searchResult);
 		return "user/index";
 	}
-	
+
 	@GetMapping("/order")
 	public String order(Model model) {
 		List<ProductDTO> listProductDTO = productService.getAllProducts();
-		model.addAttribute("listProductDTO",listProductDTO);
+		model.addAttribute("listProductDTO", listProductDTO);
 		return "user/order";
 	}
 }
-
-

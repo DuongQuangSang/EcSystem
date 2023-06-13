@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
-<title>商品管理</title>
+<title>ログイン</title>
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 <link rel="stylesheet" href="style.css">
@@ -52,17 +52,19 @@ input[type="submit"]:hover {
 </head>
     <body>
   	<div class="container" style="margin-top: 150px;">
-    <h1>ログイン</h1>
-    <form action="/user/login-method" method="GET"	>
+    <h1>EC サイト</h1>
+    <form action="/user/login-method" method="POST"	>
       <label for="username">ユーザー名</label>
       <input type="text" id="username" name="username" required><br><br>
 
-      <label for="password">パスワット</label>
+      <label for="password">パスワート</label>
       <input type="password" id="password" name="password" required><br><br>
-
+		<div th:if="${errorMessage}" class="error-message" style="color:red;">
+	        <p th:text="${errorMessage}"></p>
+	    </div>
       <input type="submit" value="ログイン">
     </form>
-    <form action="/signUp" method="GET" style="margin-top:20px;">
+    <form action="/user/sign-up" method="GET" style="margin-top:20px;">
     	<input type="submit" value="登録">
     </form>
   </div>

@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -19,7 +18,7 @@ import jp.dcnet.ec.obj.ProductDTO;
 import jp.dcnet.ec.service.ProductService;
 
 @Controller
-@RequestMapping("admin")
+//@RequestMapping("admin")
 public class ProductController {
 	@Autowired
 	private ProductService productService;
@@ -61,7 +60,7 @@ public class ProductController {
 	// 商品を編集するためのメソッド
 	@PostMapping("/edit/{productId}")
 	public ModelAndView editProduct(@PathVariable(name = "productId") long productId) {
-		ModelAndView mav = new ModelAndView("edit");
+		ModelAndView mav = new ModelAndView("admin/edit");
 
 		ProductDTO productDTO = productService.getProductById(productId);
 		mav.addObject("product", productDTO);

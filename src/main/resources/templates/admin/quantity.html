@@ -2,17 +2,17 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
-<title>商品</title>
+<title>商品の数量</title>
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 	<div class="container">
-		<a href="http://localhost:8081/"><h1>商品</h1></a>
+		<a href="http://localhost:8081/"><h1>商品の数量</h1></a>
 		<div class="text-right">
 			
-			<form action="/user/search" method="POST" style="display: inline-block;">
+			<form action="/admin/quantity-search" method="POST" style="display: inline-block;">
 				<input type="text" name="searchTerm" placeholder="Enter product name" />
 				<button class="btn btn-success">検索
 				</button>
@@ -21,19 +21,19 @@
 		<table class="table" style="margin-top:30px;">
 			<thead>
 				<tr>
-					<th>商品名</th>
-					<th>詳細説明</th>
+					<th>商品ID</th>
+					<th>商品の数量</th>
 <!-- 					<th>属性名</th> -->
 <!-- 					<th>属性の値</th> -->
 <!-- 					<th>公開状態</th> -->
- 					<th>行動</th>
+<!-- 					<th>行動</th> -->
 				</tr>
 			</thead>
 			<tbody>
-				<tr th:each="product : ${listProductDTO}">
-<!-- 					<td th:text="${product.productId}"></td> -->
-					<td th:text="${product.name}"></td>
-					<td th:text="${product.description}"></td>
+				<tr th:each="quantity : ${listQuantityDTO}">
+<!--  					<td th:text="${quantity.quantityId}"></td>  -->
+					<td th:text="${quantity.productId}"></td>
+					<td th:text="${quantity.quantity}"></td>
 <!-- 					<td th:text="${product.attributeName}"></td> -->
 <!-- 					<td th:text="${product.attributeValue}"></td> -->
 <!-- 					<td><span th:if="${product.publicStatus}"> <input -->
@@ -44,9 +44,9 @@
 <!-- 							value="true" disabled>非公開 -->
 <!-- 					</span> -->
 					<td>
-						<form th:action="@{/user/info/{productId}(productId=${product.productId})}" method="post" style="display: inline-block;">
-						    <button class="btn btn-primary">詳細</button>
-						</form>
+<!-- 						<form th:action="@{/user/info/{productId}(productId=${product.productId})}" method="post" style="display: inline-block;"> -->
+<!-- 						    <button class="btn btn-primary">詳細</button> -->
+<!-- 						</form> -->
  					</td>
 				</tr>
 				<!-- Các dòng dữ liệu sản phẩm khác -->

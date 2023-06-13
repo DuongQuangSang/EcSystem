@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
-<title>商品</title>
+<title>商品詳細</title>
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 <link rel="stylesheet" href="style.css">
@@ -12,30 +12,31 @@
 		<a href="http://localhost:8081/"><h1>商品</h1></a>
 		<div class="text-right">
 			
-			<form action="/user/search" method="POST" style="display: inline-block;">
-				<input type="text" name="searchTerm" placeholder="Enter product name" />
-				<button class="btn btn-success">検索
-				</button>
-			</form>
+<!-- 			<form action="/user/search" method="POST" style="display: inline-block;"> -->
+<!-- 				<input type="text" name="searchTerm" placeholder="Enter product name" /> -->
+<!-- 				<button class="btn btn-success">検索 -->
+<!-- 				</button> -->
+<!-- 			</form> -->
 		</div>
 		<table class="table" style="margin-top:30px;">
 			<thead>
 				<tr>
+<!-- 					<th>ID</th> -->
 					<th>商品名</th>
 					<th>詳細説明</th>
-<!-- 					<th>属性名</th> -->
-<!-- 					<th>属性の値</th> -->
+ 					<th>属性名</th> 
+ 					<th>属性の値</th>
 <!-- 					<th>公開状態</th> -->
- 					<th>行動</th>
+<!-- 					<th>行動</th> -->
 				</tr>
 			</thead>
 			<tbody>
-				<tr th:each="product : ${listProductDTO}">
+ 				<tr> <!--th:object="${product}" -->
 <!-- 					<td th:text="${product.productId}"></td> -->
-					<td th:text="${product.name}"></td>
-					<td th:text="${product.description}"></td>
-<!-- 					<td th:text="${product.attributeName}"></td> -->
-<!-- 					<td th:text="${product.attributeValue}"></td> -->
+					<td th:text="*{product.name}"></td>
+					<td th:text="*{product.description}"></td>
+					<td th:text="*{product.attributeName}"></td>
+					<td th:text="*{product.attributeValue}"></td>
 <!-- 					<td><span th:if="${product.publicStatus}"> <input -->
 <!-- 							type="checkbox" id="publicStatus" name="publicStatus" -->
 <!-- 							value="true" checked disabled>公開 -->
@@ -43,11 +44,15 @@
 <!-- 							type="checkbox" id="publicStatus" name="publicStatus" -->
 <!-- 							value="true" disabled>非公開 -->
 <!-- 					</span> -->
-					<td>
-						<form th:action="@{/user/info/{productId}(productId=${product.productId})}" method="post" style="display: inline-block;">
-						    <button class="btn btn-primary">詳細</button>
-						</form>
- 					</td>
+<!-- 					<td> -->
+<!-- 						<form  th:action="@{/info/{productId}(productId=${product.productId})}" method="post" style="display: inline-block;"> -->
+<!-- 						<button class="btn btn-primary">更新</button> -->
+<!-- 						</form> -->
+
+<!-- 						<form  th:action="@{/delete/{productId}(productId=${product.productId})}" method="post" style="display: inline-block;"> -->
+<!-- 						<button class="btn btn-danger">削除</button> -->
+<!-- 						</form> -->
+<!--  					</td> -->
 				</tr>
 				<!-- Các dòng dữ liệu sản phẩm khác -->
 			</tbody>
