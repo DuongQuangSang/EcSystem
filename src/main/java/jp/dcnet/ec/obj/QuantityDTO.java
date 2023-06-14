@@ -1,27 +1,27 @@
 package jp.dcnet.ec.obj;
 
 public class QuantityDTO {
-	private Long quantityId;
-	private Long productId;
+	private long quantityId;
+	private ProductDTO product;
 	private int quantity;
 	
 	public QuantityDTO() {
 	}
 
-	public Long getQuantityId() {
+	public long getQuantityId() {
 		return quantityId;
 	}
 
-	public void setQuantityId(Long quantityId) {
+	public void setQuantityId(long quantityId) {
 		this.quantityId = quantityId;
 	}
 
-	public Long getProductId() {
-		return productId;
+	public ProductDTO getProduct() {
+		return product;
 	}
 
-	public void setProductId(Long productId) {
-		this.productId = productId;
+	public void setProduct(ProductDTO product) {
+		this.product = product;
 	}
 
 	public int getQuantity() {
@@ -31,4 +31,5 @@ public class QuantityDTO {
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
 	}
+
 }

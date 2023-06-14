@@ -30,8 +30,8 @@ public class QuantityService {
                 .collect(Collectors.toList());
     }
     
-    public QuantityDTO getQuantityByProductId(Long productId) {
-        QuantityEntity quantityEntity = repo.fin(productId).orElse(null);
+    public QuantityDTO findQuantityByProductId(Long productId) {
+    	QuantityEntity quantityEntity = repo.findByProductId(productId);
         if (quantityEntity != null) {
             return modelMapper.map(quantityEntity, QuantityDTO.class);
         }

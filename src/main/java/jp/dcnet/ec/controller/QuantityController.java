@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 import jp.dcnet.ec.obj.QuantityDTO;
 import jp.dcnet.ec.service.ProductService;
@@ -31,12 +33,16 @@ public class QuantityController {
 	
 
 	// 商品のを検索するためのメソッド
-	@PostMapping("/quantity-search")
-	public String searchProductQuantity(Model model) {
-		QuantityDTO searchResult = quantityService.getProductById(quantityService.getProductById(productId));
-		model.addAttribute("listProductDTO", searchResult);
-		return "admin/quantity";
+	@PostMapping("/quantity-search/{productId}")
+	public ModelAndView searchProductQuantity(@PathVariable(name = "productId") Long productId) {
+		ModelAndView mav = new ModelAndView("admin/quantity-search");
+		if (productId != null) {
+		QuantityDTO searchResult = quantityService.findQuantityByProductId(productId);
+		mav.addObject("listQuantityDTO", searchResult);
+		}
+		return mav;
 	}
+	
 //	@PostMapping("/login-method")
 //	// ログインメソッド
 //	public String login(@RequestParam("username") String username,
