@@ -4,6 +4,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import jp.dcnet.ec.obj.CartDTO;
+
 @Configuration
 public class AppConfig {
 	
@@ -17,5 +19,10 @@ public class AppConfig {
 	@Bean
     public ModelMapper modelMapper() {
         return new ModelMapper();
+    }
+	
+	@Bean
+    public CartDTO cartDTO() {
+        return new CartDTO();
     }
 }

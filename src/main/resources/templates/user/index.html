@@ -47,6 +47,21 @@
 						<form th:action="@{/user/info/{productId}(productId=${product.productId})}" method="post" style="display: inline-block;">
 						    <button class="btn btn-primary">詳細</button>
 						</form>
+						<form th:action="@{/cart/add}" method="post" style="display: inline-block;">
+		                    <table>
+						        <tbody>
+						            <tr th:each="product : ${listProductDTO}">
+						                <td>
+						                    <input type="hidden" name="products[0].productId" th:value="${product.productId}" />
+						                    <input type="hidden" name="products[0].quantityId" th:value="${product.quantity.quantityId}" />
+						                    <input type="hidden" name="products[0].quantity" th:value="${product.quantity.quantity}" />
+						                    <label th:text="${product.name}"></label>
+						                </td>
+						            </tr>
+						        </tbody>
+						    </table>
+		                    <button class="btn btn-success add-to-cart" data-product-id="${product.productId}">カートに入れ</button>
+		                </form>
  					</td>
 				</tr>
 				<!-- Các dòng dữ liệu sản phẩm khác -->

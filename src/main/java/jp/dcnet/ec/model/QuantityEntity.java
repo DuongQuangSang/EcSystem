@@ -16,7 +16,7 @@ public class QuantityEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "quantity_id")
-	private long quantityId;
+	private Long quantityId;
 	
 	@OneToOne
     @JoinColumn(name = "product_id", referencedColumnName = "product_id", foreignKey = @ForeignKey(name = "quantity_product_id_fkey"))
@@ -28,11 +28,11 @@ public class QuantityEntity {
 	public QuantityEntity() {
 	}
 
-	public long getQuantityId() {
+	public Long getQuantityId() {
 		return quantityId;
 	}
 
-	public void setQuantityId(long quantityId) {
+	public void setQuantityId(Long quantityId) {
 		this.quantityId = quantityId;
 	}
 
